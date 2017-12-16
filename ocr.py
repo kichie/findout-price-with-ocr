@@ -1,5 +1,7 @@
 from PIL import Image
 import sys
+import matplotlib.pyplot as plt
+
 
 import pyocr
 import pyocr.builders
@@ -20,9 +22,14 @@ print("Available langages: %s" % ",".join(langs))
 lang = langs[2]
 print("Will use lang '%s'" % (lang))#使用する言語について
 
+img = Image.open("testdata/itoh.jpg")
+gray = img.convert("L")                     # グレイスケールに変換
+gray = gray.point(lambda x: 0 if x < 200 else x)   # 値が230以下は0になる
+# gray.show()
+
 
 txt = tool.image_to_string(#ここでOCRの対象や言語、オプションを指定する
-    Image.open("testdata/itoh.jpg"),
+    gray,
     lang='jpn',
     builder=pyocr.builders.TextBuilder()
     )
